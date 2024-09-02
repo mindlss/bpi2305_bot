@@ -30,7 +30,7 @@ export const IndexPage: FC = () => {
         return <img src={sad} className={style.gif} />;
     }
 
-    const [tickets, setTickets] = useState(0);
+    const [tickets, setTickets] = useState(1);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -56,7 +56,7 @@ export const IndexPage: FC = () => {
         fetchData();
     }, [baseUrl, id]);
 
-    function getTicketLabel(count) {
+    function getTicketLabel(count: number) {
         const lastDigit = count % 10;
         const lastTwoDigits = count % 100;
 
@@ -82,8 +82,8 @@ export const IndexPage: FC = () => {
 
     return (
         <>
-            {/* <Link to='/admin-page'>a
-            </Link> */}
+            <Link to='/admin-page'>a
+            </Link>
             <img src={tickets == 0 ? sad : pass} className={style.gif} />
             <Placeholder
                 header={`У вас ${getTicketLabel(tickets)}`}

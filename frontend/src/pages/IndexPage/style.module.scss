@@ -2,11 +2,11 @@
     width: 200px;
     height: 200px;
     margin-top: 90px;
-    transform: translateX( calc(50vw - 100px));
+    transform: translateX( calc(50vw - 50%));
 }
 .button {
     margin-top: 10px;
-    transform: translateX( calc(50vw - 85px));
+    transform: translateX( calc(50vw - 50%));
     &__buy {
         margin-top: 30px;
     }
@@ -14,5 +14,5 @@
 .bottom {
     position: fixed;
     bottom: 0;
-    transform: translateX( calc(50vw - 114px));
+    transform: translateX( calc(50vw - 50%));
 }
