@@ -1,0 +1,29 @@
+.list {
+    margin-top: 12px;
+}
+.user {
+    position: relative;
+    display: inline-block;
+    transform: translateY(-1px);
+    margin-top: -12px;
+    width: 100vw;
+    height: 80px;
+    background-color: var(--tgui--bg_color);
+    border-top: 1px solid var(--tgui--secondary_bg_color);
+    &__name {
+        position: absolute;
+        display: inline;
+        left: 30px;
+        top: 25px;
+    }
+    &__button {
+        position: absolute;
+        display: inline;
+        left: calc(100% - 100px);
+        top: 25px;
+    }
+    &__modal {
+        margin-top: 20px;
+        margin-right: 10px;
+    }
+}

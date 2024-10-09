@@ -7,9 +7,12 @@ dotenv.config();
 
 function validateTelegramHash(req, res, next) {
     // Extract the query string from the request
-    const queryString = req.url.split('?')[1];
-    const parsedData = querystring.parse(queryString);
+    const { hash } = req.body;
+    //const queryString = req.url.split('?')[1];
+    const parsedData = querystring.parse(hash);
 
+    console.log(parsedData);
+    
     // Extract and remove the hash from the parsed data
     const providedHash = parsedData.hash;
     delete parsedData.hash;

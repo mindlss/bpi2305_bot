@@ -1,6 +1,7 @@
 const Tiny = require('tiny');
 const db = new Tiny('LecturePass');
 const bot = require('../bot/send');
+const labeler = require('../utils/ticketLabel');
 
 // Add a new user
 exports.addUser = async (req, res) => {
@@ -12,6 +13,7 @@ exports.addUser = async (req, res) => {
             firstName: firstName,
             lastName: lastName,
             tickets: 0,
+            isAdmin: false,
         };
         await db.set(id.toString(), data);
         res.status(201).json({ message: 'User added', user: data });
@@ -64,9 +66,11 @@ exports.addTicket = async (req, res) => {
                 data.tickets++;
                 db.set(id.toString(), data);
 
+                var label = labeler.getTicketLabel(data.tickets);
+
                 bot.sendMessageToUser(
                     id,
-                    'Тебе дали билет\\!\n\n||https://t\\.me/LecturePass\\_bot/LecturePass||'
+                    `👀 Тебе дали билет! 🎉\n\nТеперь у тебя <b>${label}</b>\n\n<tg-spoiler>https://t.me/LecturePass_bot/LecturePass</tg-spoiler>`
                 );
 
                 res.status(200).json({ message: 'Ticket added', user: data });
@@ -90,9 +94,11 @@ exports.removeTicket = async (req, res) => {
                 data.tickets--;
                 db.set(id.toString(), data);
 
+                var label = labeler.getTicketLabel(data.tickets);
+
                 bot.sendMessageToUser(
                     id,
-                    'У тебя забрали билет\\(\n\n||https://t\\.me/LecturePass\\_bot/LecturePass||'
+                    `😔 У тебя забрали билет...\n\nТеперь у тебя <b>${label}</b>\n\n<tg-spoiler>https://t.me/LecturePass_bot/LecturePass</tg-spoiler>`
                 );
 
                 res.status(200).json({ message: 'Ticket removed', user: data });
@@ -123,14 +129,17 @@ exports.removeUser = async (req, res) => {
 exports.buyTicket = async (req, res) => {
     console.log(req.params);
     const { id } = req.params;
-    const { message } = req.query;
+    const { message } = req.body;
+    console.log(message);
     try {
         await db.get(id.toString(), function (err, data) {
             if (data && data.tickets > 0) {
                 data.tickets--;
                 db.set(id.toString(), data);
-
-                //ГРИШЕ sendMessageToUser(id, 'Hello from the bot!');
+                bot.sendMessageToUser(
+                    id,
+                    `✅ <b>${data.firstName} ${data.lastName}</b> пропустит лекцию по билету.\n\n<code>${message}</code>`
+                );
 
                 res.status(200).json({ message: 'Ticket bought', user: data });
             } else {

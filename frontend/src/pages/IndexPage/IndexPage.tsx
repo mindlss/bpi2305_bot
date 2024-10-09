@@ -9,7 +9,6 @@ import {
     Blockquote,
     Input,
 } from '@telegram-apps/telegram-ui';
-import { Link } from '@/components/Link/Link.tsx';
 
 import sad from './sad.gif';
 import pass from './pass.gif';
@@ -31,6 +30,7 @@ export const IndexPage: FC = () => {
     }
 
     const [tickets, setTickets] = useState(1);
+    const [message, setMessage] = useState('');
 
     useEffect(() => {
         const fetchData = async () => {
@@ -47,6 +47,11 @@ export const IndexPage: FC = () => {
                 }
 
                 const data = await response.json();
+
+                if (data.isAdmin) {
+                    navigate('/admin-page');
+                }
+
                 setTickets(data.tickets);
             } catch (error) {
                 console.error('Fetch error:', error);
@@ -55,6 +60,35 @@ export const IndexPage: FC = () => {
 
         fetchData();
     }, [baseUrl, id]);
+
+    const buyPass = async (message: string) => {
+        if (tickets == 0 || tickets < 0) {
+            // Анимация ошибки
+            setMessage('');
+            return;
+        }
+        const response = await fetch(baseUrl + `/users/${id}/buy`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                hash: initDataRaw,
+                message: message,
+            }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            setTickets(tickets - 1);
+            setMessage('');
+        } else {
+            // Анимация ошибки
+            setMessage('');
+            console.error('Error buying pass:', data);
+        }
+    };
 
     function getTicketLabel(count: number) {
         const lastDigit = count % 10;
@@ -82,8 +116,6 @@ export const IndexPage: FC = () => {
 
     return (
         <>
-            <Link to='/admin-page'>a
-            </Link>
             <img src={tickets == 0 ? sad : pass} className={style.gif} />
             <Placeholder
                 header={`У вас ${getTicketLabel(tickets)}`}
@@ -107,14 +139,18 @@ export const IndexPage: FC = () => {
                             <Input
                                 status="focused"
                                 header="Лекция и дата"
+                                onChange={(e) => setMessage(e.target.value)}
                             ></Input>
-                            <Button
-                                mode="bezeled"
-                                size="m"
-                                className={style.button__buy}
-                            >
-                                Потратить билет 🛒
-                            </Button>
+                            <Modal.Close>
+                                <Button
+                                    mode="bezeled"
+                                    size="m"
+                                    className={style.button__buy}
+                                    onClick={() => buyPass(message)}
+                                >
+                                    Потратить билет 🛒
+                                </Button>
+                            </Modal.Close>
                         </>
                     }
                 >

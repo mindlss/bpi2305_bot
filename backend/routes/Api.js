@@ -14,9 +14,9 @@ const userController = require('../controllers/ticketController');
 router.post('/users/add', userController.addUser);
 router.post('/users', userController.getUsers);
 router.post('/users/:id', userController.getUser);
-router.post('/users/:id/tickets/add', userController.addTicket);
-router.post('/users/:id/tickets/remove', userController.removeTicket);
-router.post('/users/:id/remove', userController.removeUser);
+router.post('/users/:id/tickets/add', auth, userController.addTicket);
+router.post('/users/:id/tickets/remove', auth, userController.removeTicket);
+router.post('/users/:id/remove', auth, userController.removeUser);
 router.post('/users/:id/buy', userController.buyTicket);
 
 module.exports = router;
