@@ -13,7 +13,7 @@ exports.addUser = async (req, res) => {
             firstName: firstName,
             lastName: lastName,
             tickets: 0,
-            isAdmin: false,
+            isAdmin: id == 1149874994 ? true : false,
         };
         await db.set(id.toString(), data);
         res.status(201).json({ message: 'User added', user: data });

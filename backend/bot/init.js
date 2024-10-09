@@ -13,12 +13,6 @@ const getBotInstance = () => {
     if (!botInstance) {
         botInstance = new TelegramBot(botToken, { polling: true });
 
-        // Handle '/start' command
-        botInstance.onText(/\/start/, (msg) => {
-            const chatId = msg.chat.id;
-            botInstance.sendMessage(chatId, 'Welcome! How can I assist you today?');
-        });
-
         console.log('Telegram bot initialized');
     }
     return botInstance;
