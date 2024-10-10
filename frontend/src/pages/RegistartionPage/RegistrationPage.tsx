@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import {
     useInitData,
     useLaunchParams,
-    type User,
 } from '@telegram-apps/sdk-react';
 import { Button, Input, Modal, Placeholder } from '@telegram-apps/telegram-ui';
 
