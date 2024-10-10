@@ -137,7 +137,7 @@ exports.buyTicket = async (req, res) => {
                 data.tickets--;
                 db.set(id.toString(), data);
                 bot.sendMessageToUser(
-                    id,
+                    1149874994,
                     `✅ <b>${data.firstName} ${data.lastName}</b> пропустит лекцию по билету.\n\n<code>${message}</code>`
                 );
 
