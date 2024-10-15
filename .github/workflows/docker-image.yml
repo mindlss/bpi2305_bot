@@ -21,3 +21,16 @@ jobs:
 
       - name: Push the Docker image to Docker Hub
         run: docker push mindes/lecture_pass:latest
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          port: 22
+          script: |
+            docker pull mindes/lecture_pass:latest
+            docker stop miniapp || true
+            docker rm miniapp || true
+            docker run -d --name miniapp -p 3000:3000 mindes/lecture_pass:latest
