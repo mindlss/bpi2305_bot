@@ -7,7 +7,9 @@ RUN npm install
 
 COPY frontend/ ./
 
-RUN npm run build
+ARG VITE_API_URL=https://mindes.ru/api
+ENV VITE_API_URL=$VITE_API_URL
+RUN npm run build -- --mode production
 
 FROM node:20.11-alpine
 

@@ -17,7 +17,7 @@ import cart from './cart.gif';
 import style from './style.module.scss';
 import { useInitData, useLaunchParams } from '@telegram-apps/sdk-react';
 
-const baseUrl = 'http://localhost:3000/api';
+const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export const IndexPage: FC = () => {
     const navigate = useNavigate();

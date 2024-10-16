@@ -8,9 +8,8 @@ import { Button, Input, Modal, Placeholder } from '@telegram-apps/telegram-ui';
 
 import hi from './hi.gif';
 import style from './style.module.scss';
-// import { Link } from '@/components/Link/Link.tsx';
 
-const baseUrl = 'http://localhost:3000/api';
+const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export const RegistrationPage: FC = () => {
     const [firstName, setFirstName] = useState('');

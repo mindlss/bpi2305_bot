@@ -21,7 +21,7 @@ interface User {
     _key: string;
 }
 
-const baseUrl = 'http://localhost:3000/api';
+const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export const AdminPage: FC = () => {
     const navigate = useNavigate();
