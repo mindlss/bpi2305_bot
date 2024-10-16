@@ -31,26 +31,6 @@ jobs:
           port: 22
           source: "docker-compose.yml"
           target: "/app/project/"
-
-      - name: Execute Docker Compose on Server
-        uses: appleboy/ssh-action@v0.1.6
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          passphrase: ${{ secrets.SERVER_SSH_PASSPHRASE }}
-          port: 22
-          script: |
-            cd /app/project
-
-            mkdir -p backend
-
-            echo "BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}" > backend/.env
-            echo "APP_PORT=3000" >> backend/.env
-
-            docker-compose down || true
-
-            docker-compose up -d --build
       
       - name: Deploy to server
         uses: appleboy/ssh-action@v0.1.6
@@ -75,6 +55,7 @@ jobs:
               docker stop miniapp && docker rm miniapp
             fi
             
-            docker-compose down || true
+            cd /app/project
 
+            docker-compose down || true
             docker-compose up -d --build
