@@ -35,4 +35,6 @@ jobs:
             docker pull mindes/lecture_pass:latest
             docker stop miniapp || true
             docker rm miniapp || true
+            mkdir -p /app/backend
+            echo "BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}" > /app/backend/.env
             docker run -d --name miniapp -p 3000:3000 mindes/lecture_pass:latest
