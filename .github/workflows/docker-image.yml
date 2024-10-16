@@ -51,4 +51,30 @@ jobs:
             docker-compose down || true
 
             docker-compose up -d --build
+      
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          passphrase: ${{ secrets.SERVER_SSH_PASSPHRASE }}
+          port: 22
+          script: |
+            echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+            
+            mkdir -p /app/backend || echo "Папка /app/backend уже существует"
+            echo 'BOT_TOKEN="${{ secrets.TELEGRAM_BOT_TOKEN }}"' > /app/backend/.env
+            echo 'APP_PORT=3000' >> /app/backend/.env
 
+            if [ ! -s /app/backend/.env ]; then
+              echo "Ошибка: файл .env пустой или не создан!" && exit 1
+            fi
+
+            if [ $(docker ps -aq -f name=miniapp) ]; then
+              docker stop miniapp && docker rm miniapp
+            fi
+            
+            docker-compose down || true
+
+            docker-compose up -d --build
