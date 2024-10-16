@@ -12,10 +12,10 @@ jobs:
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v3
-      
+
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-        
+
       - name: Build the Docker image
         run: docker build -t mindes/lecture_pass:latest .
 
@@ -33,13 +33,15 @@ jobs:
           script: |
             echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
             docker pull mindes/lecture_pass:latest
-            
+
             echo "BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}" > /app/backend/.env
             echo "APP_PORT=3000" >> /app/backend/.env
 
             if [ ! -s /app/backend/.env ]; then
-              echo "Ошибка: .env файл пустой или не создан!" && exit 1
+              echo "Ошибка: файл .env пустой или не создан!" && exit 1
             fi
+
+            cd /path/to/your/project
 
             docker-compose down || true
             docker-compose up -d --build
