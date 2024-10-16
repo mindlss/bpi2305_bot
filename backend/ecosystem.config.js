@@ -4,7 +4,7 @@ module.exports = {
         name: 'miniapp',
         script: 'npm',
         args: 'run start',
-        cwd: './backend',
+        cwd: '/app/backend',
         instances: 1,
         exec_mode: 'fork',
         env: {
