@@ -43,9 +43,12 @@ jobs:
           script: |
             cd /app/project
 
+            mkdir -p backend
+
             echo "BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}" > backend/.env
             echo "APP_PORT=3000" >> backend/.env
 
             docker-compose down || true
 
             docker-compose up -d --build
+
