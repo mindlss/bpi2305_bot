@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v3
@@ -22,7 +22,7 @@ jobs:
       - name: Push the Docker image to Docker Hub
         run: docker push mindes/lecture_pass:latest
 
-      - name: Deploy to server
+      - name: Deploy to server via SSH
         uses: appleboy/ssh-action@v0.1.6
         with:
           host: ${{ secrets.SERVER_HOST }}
@@ -33,30 +33,13 @@ jobs:
           script: |
             echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
             docker pull mindes/lecture_pass:latest
-            docker stop miniapp || true
-            docker rm miniapp || true
             
-            mkdir -p /app/backend || echo "Папка /app/backend уже существует"
-            echo 'BOT_TOKEN="${{ secrets.TELEGRAM_BOT_TOKEN }}"' > /app/backend/.env
-            echo 'APP_PORT=3000' >> /app/backend/.env
+            echo "BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}" > /app/backend/.env
+            echo "APP_PORT=3000" >> /app/backend/.env
 
             if [ ! -s /app/backend/.env ]; then
-              echo "Ошибка: файл .env пустой или не создан!" && exit 1
+              echo "Ошибка: .env файл пустой или не создан!" && exit 1
             fi
 
-            if [ $(docker ps -aq -f name=miniapp) ]; then
-              docker stop miniapp && docker rm miniapp
-            fi
-            
-            sleep 2
-
-            docker run -d --name miniapp -p 3000:3000 \
-              -v /app/backend/.env:/app/backend/.env \
-              mindes/lecture_pass:latest
-
-            sleep 5
-            if [ $(docker ps -q -f name=miniapp) ]; then
-              echo "Контейнер miniapp успешно запущен"
-            else
-              echo "Ошибка: контейнер miniapp не запустился!" && exit 1
-            fi
+            docker-compose down || true
+            docker-compose up -d --build
