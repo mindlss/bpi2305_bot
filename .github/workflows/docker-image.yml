@@ -1,4 +1,4 @@
-name: Docker Build and Push
+name: Docker Build and Deploy
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,13 +16,21 @@ jobs:
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-      - name: Build the Docker image
-        run: docker build -t mindes/lecture_pass:latest .
+      - name: Build and Push Docker Image
+        run: |
+          docker build -t mindes/lecture_pass:latest .
+          docker push mindes/lecture_pass:latest
 
-      - name: Push the Docker image to Docker Hub
-        run: docker push mindes/lecture_pass:latest
+      - name: Deploy via SCP and SSH
+        uses: appleboy/scp-action@v0.1.0
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          source: "docker-compose.yml"
+          target: "/app/project/"
 
-      - name: Deploy to server via SSH
+      - name: Execute Docker Compose on Server
         uses: appleboy/ssh-action@v0.1.6
         with:
           host: ${{ secrets.SERVER_HOST }}
@@ -31,17 +39,11 @@ jobs:
           passphrase: ${{ secrets.SERVER_SSH_PASSPHRASE }}
           port: 22
           script: |
-            echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-            docker pull mindes/lecture_pass:latest
+            cd /app/project
 
-            echo "BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}" > /app/backend/.env
-            echo "APP_PORT=3000" >> /app/backend/.env
-
-            if [ ! -s /app/backend/.env ]; then
-              echo "Ошибка: файл .env пустой или не создан!" && exit 1
-            fi
-
-            cd /path/to/your/project
+            echo "BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}" > backend/.env
+            echo "APP_PORT=3000" >> backend/.env
 
             docker-compose down || true
+
             docker-compose up -d --build
