@@ -18,8 +18,8 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t mindes/lecture_pass:latest .
-          docker push mindes/lecture_pass:latest
+          docker build -t mindes/bpi2305_bot:latest .
+          docker push mindes/bpi2305_bot:latest
 
       - name: Transfer files via SCP
         uses: appleboy/scp-action@v0.1.6

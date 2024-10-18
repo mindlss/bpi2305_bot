@@ -10,7 +10,7 @@ services:
       - mongodb-data:/data/db
 
   app:
-    image: mindes/lecture_pass:latest
+    image: mindes/bpi2305_bot:latest
     container_name: miniapp
     volumes:
       - ./backend/.env:/app/backend/.env
