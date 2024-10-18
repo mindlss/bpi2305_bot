@@ -12,7 +12,7 @@ dotenv.config();
 
 const app = express();
 
-mongoose.connect('mongodb://localhost:27017/miniapp', {
+mongoose.connect('mongodb://mongodb:27017/miniapp', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
