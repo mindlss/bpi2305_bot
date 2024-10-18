@@ -138,7 +138,7 @@ export const IndexPage: FC = () => {
                         <>
                             <Input
                                 status="focused"
-                                header="Лекция и дата"
+                                header="Сообщение старосте 🥰"
                                 onChange={(e) => setMessage(e.target.value)}
                             ></Input>
                             <Modal.Close>
