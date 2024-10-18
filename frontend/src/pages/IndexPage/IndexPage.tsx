@@ -11,7 +11,7 @@ import {
 } from '@telegram-apps/telegram-ui';
 
 import sad from './sad.gif';
-import pass from './pass.gif';
+import diamond from './diamond.gif';
 import question from './question.webp';
 import cart from './cart.gif';
 import style from './style.module.scss';
@@ -86,7 +86,7 @@ export const IndexPage: FC = () => {
         } else {
             // Анимация ошибки
             setMessage('');
-            console.error('Error buying pass:', data);
+            console.error('Error buying wrappers:', data);
         }
     };
 
@@ -95,28 +95,28 @@ export const IndexPage: FC = () => {
         const lastTwoDigits = count % 100;
 
         if (lastTwoDigits >= 11 && lastTwoDigits <= 14) {
-            return `${count} билетов! 🥳`;
+            return `${count} фантиков! 🥳`;
         }
 
         if (count == 0) {
-            return `${count} билетов(`;
+            return `${count} фантиков(`;
         }
 
         switch (lastDigit) {
             case 1:
-                return `${count} билет! 🥳`;
+                return `${count} фантик! 🥳`;
             case 2:
             case 3:
             case 4:
-                return `${count} билета! 🥳`;
+                return `${count} фантика! 🥳`;
             default:
-                return `${count} билетов! 🥳`;
+                return `${count} фантиков! 🥳`;
         }
     }
 
     return (
         <>
-            <img src={tickets == 0 ? sad : pass} className={style.gif} />
+            <img src={tickets == 0 ? sad : diamond} className={style.gif} />
             <Placeholder
                 header={`У вас ${getTicketLabel(tickets)}`}
             ></Placeholder>
@@ -129,7 +129,7 @@ export const IndexPage: FC = () => {
                         className={style.button}
                         disabled={tickets == 0}
                     >
-                        Потратить билет 🛒
+                        Потратить фантики 🛒
                     </Button>
                 }
             >
@@ -148,7 +148,7 @@ export const IndexPage: FC = () => {
                                     className={style.button__buy}
                                     onClick={() => buyPass(message)}
                                 >
-                                    Потратить билет 🛒
+                                    Потратить 1 фантик 🛒
                                 </Button>
                             </Modal.Close>
                         </>
@@ -169,7 +169,7 @@ export const IndexPage: FC = () => {
                 header={<Modal.Header>FAQ</Modal.Header>}
                 trigger={
                     <Placeholder
-                        description="Как получить билет?"
+                        description="Как получить фантики?"
                         className={style.bottom}
                     ></Placeholder>
                 }
@@ -177,7 +177,7 @@ export const IndexPage: FC = () => {
                 <Placeholder
                     description={
                         <Blockquote type="text">
-                            Билеты выдаются за заслуги, проявленные инициативы,
+                            Фантики выдаются за заслуги, проявленные инициативы,
                             и массовые рассылки готовых дз или лаб, а так же за
                             хорошую посещаемость.
                         </Blockquote>

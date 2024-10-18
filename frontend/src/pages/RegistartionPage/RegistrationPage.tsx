@@ -76,7 +76,6 @@ export const RegistrationPage: FC = () => {
             <Placeholder description="Впиши свои настоящие имя и фамилию, так старосте будет проще тебя найти."></Placeholder>
 
             <Modal
-                header={<Modal.Header>FAQ</Modal.Header>}
                 trigger={
                     <Button mode="bezeled" size="m" className={style.button}>
                         Начать

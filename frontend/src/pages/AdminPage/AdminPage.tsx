@@ -123,7 +123,7 @@ export const AdminPage: FC = () => {
             // success
         } else {
             // error
-            console.error('Error taking pass:', data);
+            console.error('Error taking wrapper:', data);
         }
     };
 
@@ -159,7 +159,6 @@ export const AdminPage: FC = () => {
                         </Headline>
     
                         <Modal
-                            header={<Modal.Header>FAQ</Modal.Header>}
                             trigger={
                                 <Button className={style.user__button} size="s">
                                     выбор
@@ -170,7 +169,7 @@ export const AdminPage: FC = () => {
                                 header={`${user.firstName} ${user.lastName}`}
                                 description={
                                     <>
-                                        <header>{`всего билетов: ${user.tickets}`}</header>
+                                        <header>{`всего фантиков: ${user.tickets}`}</header>
                                         <Button
                                             className={style.user__modal}
                                             onClick={() => givePass(user.id)}
